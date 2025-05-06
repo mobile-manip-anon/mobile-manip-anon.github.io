@@ -120,84 +120,120 @@
       </div>
     </section>
 
-      <div class="columns shaded-panel">
-        <div class="column has-text-centered">
-          <video id="pillows"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/pillow.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">Pillow Rearrangement (16/20) </h3>
+    <section class="hero is-light is-small">
+      <div class="hero-body">
+        <div class="container">
+          <div id="results-carousel" class="carousel results-carousel">
+            <!-- Fold -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/pillow.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
+            <!-- Egg -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/remote.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
+            <!-- Socks -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/sweeping.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
+            <!-- Drawer -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/cube.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
+            <!-- Fork -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/dishwasher.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/cabinet.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+          </div>
         </div>
-        <div class="column has-text-centered">
-          <video id="tv_remote"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/remote.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">TV Remote Retrieval (15/20) </h3>
-        </div>
-        <div class="column has-text-centered">
-          <video id="sweep"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/sweeping.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">Sweeping Trash (16/20) </h3>
-        </div>
-        </div>
-      <div class="columns shaded-panel">
-        <div class="column has-text-centered">
-          <video id="cube"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/cube.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">Cube (18/20) </h3>
-        </div>
-        <div class="column has-text-centered">
-          <video id="dishwasher"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/dishwasher.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">Dishwasher (13/20) </h3>
-        </div>
-        <div class="column has-text-centered">
-          <video id="cabinet"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/cabinet.mp4" 
-            type="video/mp4">
-          </video>
-          <h3 class="title is-5">Cabinet (17/20) </h3>
-        </div>
-        </div>
-    </div>
-    </div>
+      </div>
+    </section>
     <h2 class="subtitle has-text-centered">
       <br />
       Above: <span>HoMeR</span> tackles <b>long-horizon, precise, spatially varied</b> real-world and</br>simulated tasks having only been trained on <b>20 demos</b>. Videos are 7X.
@@ -303,6 +339,185 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
       </div>
     </section>
 
+    <hr/>
+
+    <!-- Evaluations -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Header -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Evaluations</h2>
+          </div>
+        </div>
+    
+        <!-- Description -->
+        <div class="columns is-centered shaded-panel" style="width: 90%;">
+          <div class="column">
+            <p>
+              We evaluate <strong>HoMeR</strong> on 6 diverse mobile manipulation tasks using only 20 demonstrations each. To isolate the effects of hybrid action modes and whole-body control (WBC), we compare against policies that differ along two axes:
+            </p>
+            <ul style="text-align: left;">
+              <li><b>Hybrid vs. Dense-Only:</b> Switching between both keypose and dense actions vs. only dense actions.</li>
+              <li><b>Whole-Body Control vs. Decoupled Base+Arm:</b> Using a whole-body controller to solve for base and arm motion given end-effector targets, vs. directly predicting joint-level motions for each.</li>
+            </ul>
+            <p>
+              The baselines below match HoMeR in training data, but differ in action space or control strategy.
+            </p>
+          </div>
+        </div>
+        <br />
+    
+    <div class="columns is-centered shaded-panel" style="width: 90%;">
+      <div class="column">
+        <h2 class="title is-4 has-text-centered">Baselines Overview</h2>
+        <table class="table is-fullwidth is-striped is-bordered has-text-centered">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Hybrid<br/>Actions</th>
+              <th>Whole-Body<br/>Control</th>
+              <th>Action Space</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>DP (B+A)</strong></td>
+              <td>&#10007;</td>
+              <td>&#10007;</td>
+              <td>Dense delta base + end-effector actions</td>
+            </tr>
+            <tr>
+              <td><strong>DP (WBC)</strong></td>
+              <td>&#10007;</td>
+              <td>&#10003;</td>
+              <td>Dense delta end-effector actions</td>
+            </tr>
+            <tr>
+              <td><strong>HoMeR (B+A)</strong></td>
+              <td>&#10003;</td>
+              <td>&#10007;</td>
+              <td>Base and end-effector keyposes + dense delta base and end-effector actions</td>
+            </tr>
+            <tr style="background-color: #fb8b2440;">
+              <td><strong>HoMeR (Ours)</strong></td>
+              <td style="background-color: #fb8b2440;">&#10003;</td>
+              <td style="background-color: #fb8b2440;">&#10003;</td>
+              <td style="background-color: #fb8b2440;">End-effector keyposes and dense delta actions</td>
+            </tr>
+          </tbody>
+        </table>
+    
+        <p class="has-text-justified">
+          <br />
+          <strong>DP (B+A):</strong> Dense-only Diffusion Policy with decoupled base-arm delta prediction. <br />
+          <strong>DP (WBC):</strong> Dense-only Diffusion Policy with EE delta prediction, executed through WBC. <br />
+          <strong>HoMeR (B+A):</strong> Hybrid keypose+delta model without WBC. <br />
+          <strong>HoMeR:</strong> Full method with hybrid actions and WBC for coordinated base-arm control.
+        </p>
+      </div>
+    </div>
+
+    
+        <br/>
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h3 class="title is-4">Benchmarking Results</h3>
+          </div>
+        </div>
+        <div class="chart-container" style="width: 90%; height: 300px; margin: auto;">
+          <canvas id="taskBarChart"></canvas>
+        </div>
+
+    
+      </div>
+    </section>
+
+    <section class="section">
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h3 class="title is-4">HoMeR Rollouts</h3>
+          </div>
+        </div>
+      <div class="columns shaded-panel">
+        <div class="column has-text-centered">
+          <video id="cube"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/cube.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">Cube (18/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="dishwasher"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/dishwasher.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">Dishwasher (13/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="cabinet"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/cabinet.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">Cabinet (17/20) </h3>
+        </div>
+        </div>
+    </div>
+      <div class="columns shaded-panel">
+        <div class="column has-text-centered">
+          <video id="pillows"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/pillow.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">Pillow Rearrangement (16/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="tv_remote"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/remote.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">TV Remote Retrieval (15/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="sweep"
+            controls
+            muted
+            autoplay
+            loop
+            width="100%">
+            <source src="media/sweeping.mp4" 
+            type="video/mp4">
+          </video>
+          <h3 class="title is-5">Sweeping Trash (16/20) </h3>
+        </div>
+        </div>
+    </div>
+    <hr>
 
   </body>
 </html>
