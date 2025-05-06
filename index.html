@@ -120,7 +120,54 @@
       </div>
     </section>
 
+    <!-- Abstract. -->
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content has-text-justified">
+              <p>
+We introduce HoMeR, an imitation learning framework for mobile manipulation that combines whole-body control with hybrid action modes that handle both long-range and fine-grained motion, enabling effective performance on realistic in-the-wild tasks. At its core is a fast, kinematics-based whole-body controller that maps desired end-effector poses to coordinated motion across the mobile base and arm. Within this reduced end-effector action space, HoMeR learns to switch between absolute pose predictions for long-range movement and relative pose predictions for fine-grained manipulation, offloading low-level coordination to the controller and focusing learning on task-level decisions.
+We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real home. We compare HoMeR to baselines without hybrid actions or whole-body control across 3 simulated and 3 real household tasks such as opening cabinets, sweeping trash, and rearranging pillows. Across tasks, HoMeR achieves an overall success rate of <strong>79.17%</strong> using just 20 demonstrations per task, outperforming the next best baseline by <strong>29.17</strong> on average. HoMeR is also compatible with vision-language models and can leverage their internet-scale priors to better generalize to novel object appearances, layouts, and cluttered scenes. In summary, HoMeR moves beyond tabletop settings and demonstrates a scalable path toward sample-efficient, generalizable manipulation in everyday indoor spaces.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Abstract. -->
+      </div>
+    </section>
 
+
+    <!-- Title Card + Caption -->
+    <section class="hero teaser">
+      <div class="container is-fullhd">
+        <div class="hero-body">
+          <div class="container">
+            <div class="columns is-vcentered  is-centered shaded-panel" style="width: 70%;">
+            <h2 class="subtitle has-text-centered">
+            TLDR: We introduce <strong><span>HoMeR</span></strong> (<span style="text-decoration: underline;">H</span>ybrid Wh<span style="text-decoration: underline;">o</span>le-Body Policies for <span style="text-decoration: underline;">M</span>obil<span style="text-decoration: underline;">e</span> <span style="text-decoration: underline;">R</span>obots),<br>which combines a <b style="color: orange;">hybrid IL agent</b> with a fast, kinematics-based <b style="color: green;">whole-body controller</b> for sample-efficient, generalizable mobile manipulation in-the-wild.
+
+            </h2>
+            </div>
+            <br/>
+            <div class="columns is-vcentered  is-centered">
+              <video
+                id="teaser"
+                class="intro-video"
+                autoplay
+                loop
+                muted
+                height="100%"
+              >
+                <source src="media/method_overview.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr>
 
   </body>
 </html>
