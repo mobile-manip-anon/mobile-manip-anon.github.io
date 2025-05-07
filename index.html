@@ -590,13 +590,10 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <p class="content has-text-justified" style="margin-top: 1em;">
           This is a long-horizon, multi-phase task where the robot must <b>reach the cabinet handle</b>, <b>open the cabinet door</b>, then <b>pick up a TV remote</b> and <b>place it on the TV stand</b>.
           <br/><br/>
-          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reliably reaching the cabinet handle is difficult. <b>DP (B+A)</b> performs slightly better by leveraging a base keypose to approach the cabinet and an arm keypose to reach the handle, and dense from there. However, any slight base misalignments complicate arm manipulation.
-          <br/><br/>
-          <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning while enabling precise object manipulation.
+          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reliably reaching the cabinet handle is difficult. 
         </p>
       </div>
     </div>
-
     <div class="columns">
       <div class="column has-text-centered">
         <video controls muted autoplay loop width="100%">
@@ -611,6 +608,16 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <h3 class="title is-6">DP (WBC) - (3/20)</h3>
       </div>
     </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <p class="content has-text-justified" style="margin-top: 1em;">
+<b>HoMeR (B+A)</b> performs slightly better by leveraging a base keypose to approach the cabinet and an arm keypose to reach the handle, and dense from there. However, any slight base misalignments complicate arm manipulation.
+         <br/>
+          <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning while enabling precise object manipulation.
+        </p>
+      </div>
+    </div>
+
     <div class="columns">
       <div class="column has-text-centered">
         <video controls muted autoplay loop width="100%">
@@ -695,14 +702,15 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
       <div class="column">
         <h3 class="title is-4">Qualitative Generalization Results</h3>
         <div class="column has-text-centered">
+        <p class="content has-text-justified" style="margin-top: 1em;">
+          Below, we show that while <b>HoMeR</b> is trained on a single TV stand cabinet and a specific pillow–couch configuration, the learned policy achieves <b>non-zero success</b> on <b>novel cabinets</b> and a <b>different pillow/couch pair</b> at test time. We note that HoMeR still struggles quite a bit on the new couch/pillow setup, likely due to the vastly different wall color and lighting conditions.
+        </p>
           <video id="sweep" controls="" muted="" autoplay="" loop="" width="100%">
             <source src="media/generalization.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Unseen TV Remote / Pillow Scenarios</h3>
         </div>
         <p class="content has-text-justified" style="margin-top: 1em;">
-          Above, we show that while <b>HoMeR</b> is trained on a single TV stand cabinet and a specific pillow–couch configuration, the learned policy achieves <b>non-zero success</b> on <b>novel cabinets</b> and a <b>different pillow/couch pair</b> at test time. We note that HoMeR still struggles quite a bit on the new couch/pillow setup, likely due to the vastly different wall color and lighting conditions.
-          <br><br>
           Although achieving truly zero-shot generalization in unconstrained real-world environments remains a significant challenge, we are encouraged by HoMeR's promising initial results and potential to leverage VLM knowledge in the future to tackle truly different furniture geometry or room layouts.
         </p>
       </div>
