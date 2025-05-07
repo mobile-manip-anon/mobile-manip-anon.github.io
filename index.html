@@ -311,8 +311,6 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
              <p>We demonstrate the range of tasks teleoperable with our whole-body controller in a real home. The controller uses a MuJoCo- and Mink-based IK solver with velocity, posture, and collision constraints—identical to the one used for all autonomous rollouts.
               </p>
             </div>
-
-
             </div>
 
             <div class="shaded-panel" style="background: white;">
@@ -331,20 +329,66 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
               </p>
             </div>
 
+            <div class="shaded-panel" style="background: white;">
+            <h4 class="title is-5"><font color='black'>Data Annotation: Mode Labeling</font></h4>
+            <video
+              id="mode-labeling-video"
+              class="data-collection-video"
+              autoplay
+              muted
+              loop
+ style="transform: scale(1.32); transform-origin: center top;"
+            >
+              <source src="media/mode_annotation.mp4" type="video/mp4" />
+            </video>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
 
             </div>
+            <div class="content has-text-justified">
+            <p>In order to train HoMeR, we require mode and salient point annotations for each demonstration. We use a custom web-based UI to label control modes, allowing annotators to scrub through episodes and segment them into <b>keypose</b> (orange) and <b>dense</b> (gray) modes. Above, we annotate the <b>Cabinet</b> task by labeling the reaching motion toward the handle as keypose, and the grasping and opening phase as dense.</p>
             </div>
+            </div>
+
+            <div class="shaded-panel" style="background: white;">
+            <h4 class="title is-5"><font color='black'>Data Annotation: Salient Point Labeling</font></h4>
+            <video
+              id="sp-labeling-video"
+              class="data-collection-video"
+              autoplay
+              muted
+              loop
+            >
+              <source src="media/salient_point_annotation.mp4" type="video/mp4" />
+            </video>
+
+            <div class="content has-text-justified">
+            <p>To train HoMeR's keypose policy, we provide supervision in the form of <b>salient point annotations</b>. Using a 3D UI, annotators can select a task-relevant point in the scene—such as the <b>cabinet handle</b>. This point is used to supervise the policy’s predicted saliency map and offset-based actions, helping it focus on meaningful regions to reach.</p>
+           
+              </p>
+            </div>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
-    <hr/>
+
 
     <section class="section"> 
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column">
-            <h2 class="title is-3">HoMeR Overview</h2>
+            <h2 class="title is-3">Method Overview</h2>
+            <p class="content has-text-centered">
+Using the data collected and annotated above, we train <b>HoMeR</b>, a framework that<br/>combines a hybrid IL policy with a whole-body controller for execution:
+            </p>
+            <br/>
             <div class="columns is-vcentered is-centered">
               <img src="media/method.png" style="width: 85%;" />
             </div>
@@ -354,7 +398,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
                 <li><b>Keypose Policy:</b> Uses third-person point clouds to predict 6-DoF end-effector poses and next control mode for long-range motion.
 Rather than directly regressing a target pose, the policy learns to predict a task-relevant <i>salient point</i> in the scene and outputs a relative offset from this point to the desired position.
 Separate learnable tokens predict end-effector orientation, gripper state, and control mode.
-The policy can optionally be <b>conditioned</b> on an externally specified salient point—e.g., from a vision-language model—for dynamic and interpretable goal specification.</li>
+The policy can optionally be <b>conditioned</b> on an externally specified salient point—e.g., from a vision-language model—for dynamic and interpretable goal specification (HoMeR-Cond).</li>
                 <li><b>Dense Policy:</b> Diffusion Policy which uses RGB images (third-person and wrist) to predict relative 6-DoF delta actions for fine-grained manipulation once near objects.</li>
                 <li><b>Whole-Body Controller (WBC):</b> Converts end-effector actions into joint commands for the mobile base and arm, enabling smooth, constraint-aware execution.</li>
               </ul>
@@ -508,18 +552,69 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
     </section>
 
 
-    <section class="section">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered has-text-centered">
-          <div class="column">
-            <h3 class="title is-4">Generalization Results</h3>
-          </div>
-        </div>
-        <div class="columns is-centered has-text-centered">
-          <p class="content has-text-justified" style="margin-top: 1em;">
-            A key benefit of our architecture is the ability to optionally condition the keypose policy on 3D keypoints from a vision-language model (VLM), enabling flexible goal specification and generalization to unseen objects. To assess this, we evaluate <strong>HoMeR-Cond</strong> on four challenging Cube variants with changes in size, clutter, and appearance, using VLM-predicted keypoints as input.
-          </p>
-        </div>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h3 class="title is-4">Representative Baseline Comparison: TV Remote Task</h3>
+        <p class="content has-text-justified" style="margin-top: 1em;">
+          This is a long-horizon, multi-phase task where the robot must <b>reach the cabinet handle</b>, <b>open the cabinet door</b>, then <b>pick up a TV remote</b> and <b>place it on the TV stand</b>.
+          <br/><br/>
+          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reaching the cabinet handle reliably is difficult, and long-range motion is unstable. <b>DP (B+A)</b> performs slightly better by leveraging a base delta to approach the cabinet and an arm delta to reach, but lacks coordinated planning between base and arm—resulting in misalignment during manipulation.
+          <br/><br/>
+          <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning and enabling precise object manipulation.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column has-text-centered">
+        <video controls muted autoplay loop width="100%">
+          <source src="media/tv_dp_ba.mp4" type="video/mp4">
+        </video>
+        <h3 class="title is-6">DP (B+A)</h3>
+      </div>
+      <div class="column has-text-centered">
+        <video controls muted autoplay loop width="100%">
+          <source src="media/tv_dp_wbc.mp4" type="video/mp4">
+        </video>
+        <h3 class="title is-6">DP (WBC)</h3>
+      </div>
+      <div class="column has-text-centered">
+        <video controls muted autoplay loop width="100%">
+          <source src="media/tv_homer_ba.mp4" type="video/mp4">
+        </video>
+        <h3 class="title is-6">HoMeR (B+A)</h3>
+      </div>
+      <div class="column has-text-centered">
+        <video controls muted autoplay loop width="100%">
+          <source src="media/tv_homer.mp4" type="video/mp4">
+        </video>
+        <h3 class="title is-6"><b>HoMeR (Ours)</b></h3>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h3 class="title is-4">Generalization Results</h3>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <p class="content has-text-justified" style="margin-top: 1em;">
+        A key advantage of HoMeR is the ability to condition the keypose policy on <b>externally provided 3D keypoints</b>—enabling flexible goal specification and better generalization. We introduce <strong>HoMeR-Cond</strong>, which takes as input 3D keypoints generated by the vision-language model <b>Molmo</b> based on a language description of the task.
+        <br/><br/>
+To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point clouds without color and augmented with randomly generated distractor points to simulate clutter and occlusions. We evaluate it on four challenging Cube variants with changes in size, distractors, and appearance.
+      </p>
+    </div>
+
 
         <div class="chart-container" style="width: 90%; height: 300px; margin: auto;">
           <canvas id="cubeChart" width="1594" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 797px;"></canvas>
