@@ -75,13 +75,42 @@
     ></script>
   </head>
   <body>
+
+<!-- Navbar -->
+<nav class="navbar is-light is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="#">
+      <strong>HoMeR</strong>
+    </a>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarMenu" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="#data">Data Collection</a>
+      <a class="navbar-item" href="#method">Method</a>
+      <a class="navbar-item" href="#benchmark">Benchmark Experiments</a>
+      <a class="navbar-item" href="#generalization">Generalization Experiments</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Spacer to prevent navbar overlap -->
+<div style="margin-top: 4.5rem;"></div>
+
+
     <section class="hero">
+      <div class="hero-bg"></div>
       <div class="hero-body">
         <div class="container is-max-desktop">
           <div class="columns is-centered">
             <div class="column has-text-centered">
               <h1 class="title is-1 publication-title">
-                HoMeR: Learning In-the-Wild Mobile Manipulation via
+                <span class="gradient-text">HoMeR</span>: Learning In-the-Wild Mobile Manipulation via
                 Hybrid Imitation and Whole-Body Control
               </h1>
 
@@ -266,7 +295,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
           <div class="container">
             <div class="columns is-vcentered  is-centered shaded-panel" style="width: 70%;">
             <h2 class="subtitle has-text-centered">
-            TLDR: We introduce <strong><span>HoMeR</span></strong> (<span style="text-decoration: underline;">H</span>ybrid Wh<span style="text-decoration: underline;">o</span>le-Body Policies for <span style="text-decoration: underline;">M</span>obil<span style="text-decoration: underline;">e</span> <span style="text-decoration: underline;">R</span>obots),<br>which combines a <b style="color: orange;">hybrid IL agent</b> with a fast, kinematics-based <b style="color: green;">whole-body controller</b> for sample-efficient, generalizable mobile manipulation in-the-wild.
+            TLDR: We introduce <strong><span>HoMeR</span></strong> (<span style="text-decoration: underline;">H</span>ybrid Wh<span style="text-decoration: underline;">o</span>le-Body Policies for <span style="text-decoration: underline;">M</span>obil<span style="text-decoration: underline;">e</span> <span style="text-decoration: underline;">R</span>obots),<br>which combines a <b style="color: orange;">hybrid IL agent</b> with a fast, kinematics-based <b style="color: green;">whole-body controller</b> for sample-efficient, generalizable mobile manipulation in-the-wild 🏡.
 
             </h2>
             </div>
@@ -290,7 +319,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
     <hr>
 
     <!-- Data Collection -->
-    <section class="section">
+    <section class="section" id="data">
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column">
@@ -381,7 +410,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
 
 
     <hr/>
-    <section class="section"> 
+    <section class="section" id="method"> 
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
           <div class="column">
@@ -416,7 +445,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <!-- Header -->
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Experiments</h2>
+            <h2 class="title is-3" id="benchmark">Experiments</h2>
           </div>
         </div>
     
@@ -454,25 +483,25 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
               <td><strong>DP (B+A)</strong></td>
               <td>&#10007;</td>
               <td>&#10007;</td>
-              <td>Dense delta base + end-effector actions</td>
+              <td>Dense base + end-effector delta actions</td>
             </tr>
             <tr>
               <td><strong>DP (WBC)</strong></td>
               <td>&#10007;</td>
               <td>&#10003;</td>
-              <td>Dense delta end-effector actions</td>
+              <td>Dense end-effector delta actions</td>
             </tr>
             <tr>
               <td><strong>HoMeR (B+A)</strong></td>
               <td>&#10003;</td>
               <td>&#10007;</td>
-              <td>Base and end-effector keyposes + dense delta base and end-effector actions</td>
+              <td>Base and end-effector keyposes + dense base and end-effector delta actions</td>
             </tr>
             <tr style="background-color: #fb8b2440;">
               <td><strong>HoMeR (Ours)</strong></td>
               <td style="background-color: #fb8b2440;">&#10003;</td>
               <td style="background-color: #fb8b2440;">&#10003;</td>
-              <td style="background-color: #fb8b2440;">End-effector keyposes and dense delta actions</td>
+              <td style="background-color: #fb8b2440;">End-effector keyposes and dense end-effector delta actions</td>
             </tr>
           </tbody>
         </table>
@@ -561,9 +590,9 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <p class="content has-text-justified" style="margin-top: 1em;">
           This is a long-horizon, multi-phase task where the robot must <b>reach the cabinet handle</b>, <b>open the cabinet door</b>, then <b>pick up a TV remote</b> and <b>place it on the TV stand</b>.
           <br/><br/>
-          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reaching the cabinet handle reliably is difficult, and accurate long-range motion is difficult. <b>DP (B+A)</b> performs slightly better by leveraging a base keypose to approach the cabinet and an arm keypose to reach the handle, and dense from there. However, any slight base misalignments complicate arm manipulation.
+          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reliably reaching the cabinet handle is difficult. <b>DP (B+A)</b> performs slightly better by leveraging a base keypose to approach the cabinet and an arm keypose to reach the handle, and dense from there. However, any slight base misalignments complicate arm manipulation.
           <br/><br/>
-          <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning and enabling precise object manipulation.
+          <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning while enabling precise object manipulation.
         </p>
       </div>
     </div>
@@ -605,7 +634,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h3 class="title is-4">Quantitative Generalization Results</h3>
+        <h3 class="title is-4" id="generalization">Quantitative Generalization Results</h3>
       </div>
     </div>
     <div class="columns is-centered has-text-centered">
