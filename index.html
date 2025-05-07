@@ -238,7 +238,7 @@
       <br />
       Above: <span>HoMeR</span> tackles <b>long-horizon, precise, spatially varied</b> real-world and</br>simulated tasks having only been trained on <b>20 demos</b>. Videos are 7X.
     </h2>
-    <hr>
+    <hr/>
 
     <!-- Abstract. -->
     <section class="section">
@@ -505,7 +505,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
     <section class="section">
         <div class="columns is-centered has-text-centered">
           <div class="column">
-            <h3 class="title is-4">HoMeR Rollouts</h3>
+            <h3 class="title is-5">HoMeR Rollouts</h3>
           </div>
         </div>
       <div class="columns shaded-panel">
@@ -557,7 +557,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h3 class="title is-4">Representative Baseline Comparison: TV Remote Task</h3>
+        <h3 class="title is-5">Representative Baseline Comparison: TV Remote Task</h3>
         <p class="content has-text-justified" style="margin-top: 1em;">
           This is a long-horizon, multi-phase task where the robot must <b>reach the cabinet handle</b>, <b>open the cabinet door</b>, then <b>pick up a TV remote</b> and <b>place it on the TV stand</b>.
           <br/><br/>
@@ -600,14 +600,12 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
 </section>
 
 
-
-
-
+    <hr/>
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h3 class="title is-4">Generalization Results</h3>
+        <h3 class="title is-4">Quantitative Generalization Results</h3>
       </div>
     </div>
     <div class="columns is-centered has-text-centered">
@@ -635,7 +633,7 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
     <section class="section">
         <div class="columns is-centered has-text-centered">
           <div class="column">
-            <h3 class="title is-4">HoMeR-Cond Rollouts</h3>
+            <h3 class="title is-5">HoMeR-Cond Rollouts</h3>
           </div>
         </div>
       <div class="columns shaded-panel">
@@ -661,6 +659,28 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
     
     </section>
     <hr>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h3 class="title is-4">Qualitative Generalization Results</h3>
+        <div class="column has-text-centered">
+          <video id="sweep" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/generalization.mp4" type="video/mp4">
+          </video>
+          <h3 class="title is-5">Unseen TV Remote / Pillow Scenarios</h3>
+        </div>
+        <p class="content has-text-justified" style="margin-top: 1em;">
+          Above, we show that while <b>HoMeR</b> is trained on a single TV stand cabinet and a specific pillow–couch configuration, the learned policy achieves <b>non-zero success</b> on <b>novel cabinets</b> and a <b>different pillow/couch pair</b> at test time. We note that HoMeR still struggles quite a bit on the new couch/pillow setup, likely due to the vastly different wall color and lighting conditions.
+          <br><br>
+          Although achieving truly zero-shot generalization in unconstrained real-world environments remains a significant challenge, we are encouraged by HoMeR's promising initial results and potential to leverage VLM knowledge in the future to tackle truly different furniture geometry or room layouts.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   </body>
 </html>
