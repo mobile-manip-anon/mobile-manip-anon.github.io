@@ -380,6 +380,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
     </section>
 
 
+    <hr/>
     <section class="section"> 
       <div class="container is-max-desktop">
         <div class="columns is-centered has-text-centered">
@@ -415,7 +416,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <!-- Header -->
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Evaluations</h2>
+            <h2 class="title is-3">Experiments</h2>
           </div>
         </div>
     
@@ -560,7 +561,7 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <p class="content has-text-justified" style="margin-top: 1em;">
           This is a long-horizon, multi-phase task where the robot must <b>reach the cabinet handle</b>, <b>open the cabinet door</b>, then <b>pick up a TV remote</b> and <b>place it on the TV stand</b>.
           <br/><br/>
-          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reaching the cabinet handle reliably is difficult, and long-range motion is unstable. <b>DP (B+A)</b> performs slightly better by leveraging a base delta to approach the cabinet and an arm delta to reach, but lacks coordinated planning between base and arm—resulting in misalignment during manipulation.
+          Both <b>DP (B+A)</b> and <b>DP (WBC)</b> struggle with this task due to their reliance on dense-only actions. Without an abstracted notion of keyposes, reaching the cabinet handle reliably is difficult, and accurate long-range motion is difficult. <b>DP (B+A)</b> performs slightly better by leveraging a base keypose to approach the cabinet and an arm keypose to reach the handle, and dense from there. However, any slight base misalignments complicate arm manipulation.
           <br/><br/>
           <b>HoMeR</b> performs best: it first predicts a keypose to reach the cabinet, then switches to dense actions to fetch the remote. The whole-body controller (WBC) enables smooth, coordinated base-arm motion, reducing failures due to poor base positioning and enabling precise object manipulation.
         </p>
@@ -572,25 +573,27 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
         <video controls muted autoplay loop width="100%">
           <source src="media/tv_dp_ba.mp4" type="video/mp4">
         </video>
-        <h3 class="title is-6">DP (B+A)</h3>
+        <h3 class="title is-6">DP (B+A) - (7/20)</h3>
       </div>
       <div class="column has-text-centered">
         <video controls muted autoplay loop width="100%">
           <source src="media/tv_dp_wbc.mp4" type="video/mp4">
         </video>
-        <h3 class="title is-6">DP (WBC)</h3>
+        <h3 class="title is-6">DP (WBC) - (3/20)</h3>
       </div>
+    </div>
+    <div class="columns">
       <div class="column has-text-centered">
         <video controls muted autoplay loop width="100%">
           <source src="media/tv_homer_ba.mp4" type="video/mp4">
         </video>
-        <h3 class="title is-6">HoMeR (B+A)</h3>
+        <h3 class="title is-6">HoMeR (B+A) - (10/20)</h3>
       </div>
       <div class="column has-text-centered">
         <video controls muted autoplay loop width="100%">
           <source src="media/tv_homer.mp4" type="video/mp4">
         </video>
-        <h3 class="title is-6"><b>HoMeR (Ours)</b></h3>
+        <h3 class="title is-6"><b>HoMeR (Ours) - (15/20)</b></h3>
       </div>
     </div>
   </div>
