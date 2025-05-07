@@ -130,6 +130,157 @@ function generateBarChart() {
 }
 
 
+function generateStripePattern(backgroundColor = '#000000', stripeColor = '#ca5a27', angle = 45) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 30;
+  canvas.height = 30;
+  const ctx = canvas.getContext('2d');
+
+  // Fill background with the lighter orange
+  ctx.fillStyle = backgroundColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw diagonal black stripe
+  ctx.strokeStyle = stripeColor;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height);
+  ctx.lineTo(canvas.width, 0);
+  ctx.stroke();
+
+  return canvas;
+}
+
+function generateCubeChart() {
+  const ctx = document.getElementById('cubeChart').getContext('2d');
+
+  const rawData = {
+    'DP (WBC)': [9, 6, 9, 6],
+    'HoMeR': [18, 16, 4, 2],
+    'HoMeR-Cond-NoAugs': [18, 12, 2, 2],
+    'HoMeR-Cond': [16, 14, 15, 16]
+  };
+
+  const data = {
+    labels: ['Original Cube', 'Small/Large Cube', 'Cube w/ Distractors', 'New Cube Specified'],
+    datasets: [
+      {
+        label: 'DP (WBC)',
+        data: rawData['DP (WBC)'].map(x => (x / 20) * 100),
+        backgroundColor: '#ffd07b',
+        raw: rawData['DP (WBC)']
+      },
+      {
+        label: 'HoMeR',
+        data: rawData['HoMeR'].map(x => (x / 20) * 100),
+        backgroundColor: '#fb8b24',
+        raw: rawData['HoMeR']
+      },
+      {
+        label: 'HoMeR-Cond-NoAugs',
+        data: rawData['HoMeR-Cond-NoAugs'].map(x => (x / 20) * 100),
+        backgroundColor: '#ca5a27',
+        raw: rawData['HoMeR-Cond-NoAugs']
+      },
+      {
+        label: 'HoMeR-Cond',
+        data: rawData['HoMeR-Cond'].map(x => (x / 20) * 100),
+        backgroundColor: ctx.createPattern(generateStripePattern('#ca5a27', 45), 'repeat'),
+        raw: rawData['HoMeR-Cond']
+      }
+    ]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: 'black',
+            font: {
+              size: 16,
+              weight: 'bold',
+              family: 'Google Sans, sans-serif'
+            }
+          },
+          title: {
+            display: true,
+            text: 'Success Rate (%)',
+            color: 'black',
+            font: {
+              size: 18,
+              weight: 'bold',
+              family: 'Google Sans, sans-serif'
+            }
+          },
+          grid: {
+            display: false
+          }
+        },
+        x: {
+          ticks: {
+            color: 'black',
+            font: {
+              size: 16,
+              weight: 'bold',
+              family: 'Google Sans, sans-serif'
+            },
+            rotation: 0
+          },
+          title: {
+            display: true,
+            color: 'black',
+            font: {
+              size: 18,
+              weight: 'bold',
+              family: 'Google Sans, sans-serif'
+            }
+          },
+          grid: {
+            display: false
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            font: {
+              size: 16,
+              weight: 'bold',
+              family: 'Google Sans, sans-serif'
+            },
+            color: 'black'
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const count = context.dataset.raw[context.dataIndex];
+              return `${context.dataset.label}: ${count}/20`;
+            }
+          }
+        }
+      },
+      elements: {
+        bar: {
+          borderRadius: 4
+        }
+      }
+    },
+  };
+
+  new Chart(ctx, config);
+}
+
 function lazyLoadVideos() {
   const videos = document.querySelectorAll('video[data-src]');
   const options = {
@@ -153,6 +304,7 @@ function lazyLoadVideos() {
     observer.observe(video);
   });
 }
+
 
 // Function to initialize carousels
 function initCarousels() {
@@ -196,6 +348,10 @@ function init() {
   if (document.getElementById('taskBarChart')) {
     generateBarChart(); // Ensure this is called after the canvas is in the DOM
   }
+  if (document.getElementById('cubeChart')) {
+    generateCubeChart();
+  }
+
 }
 
 window.addEventListener('DOMContentLoaded', init);

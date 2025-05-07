@@ -308,7 +308,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
               <source src="media/teleop.mp4" type="video/mp4" />
             </video>
             <div class="content has-text-justified">
-              <p>
+             <p>We demonstrate the range of tasks teleoperable with our whole-body controller in a real home. The controller uses a MuJoCo- and Mink-based IK solver with velocity, posture, and collision constraints—identical to the one used for all autonomous rollouts.
               </p>
             </div>
 
@@ -327,7 +327,7 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
               <source src="media/teleop2.mp4" type="video/mp4" />
             </video>
             <div class="content has-text-justified">
-              <p>
+              <p>Our controller avoids self-collisions between the arm, base, and camera mounts by modeling each component—including the mounts as cylinders—in the MuJoCo MJCF and enforcing velocity-based collision constraints during IK optimization.
               </p>
             </div>
 
@@ -338,8 +338,32 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
         </div>
       </div>
     </section>
-
     <hr/>
+
+    <section class="section"> 
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h2 class="title is-3">HoMeR Overview</h2>
+            <div class="columns is-vcentered is-centered">
+              <img src="media/method.png" style="width: 85%;" />
+            </div>
+            <br/>
+            <div class="content has-text-left" style="margin: 0 auto; width: 85%;">
+              <ul>
+                <li><b>Keypose Policy:</b> Uses third-person point clouds to predict 6-DoF end-effector poses and next control mode for long-range motion.
+Rather than directly regressing a target pose, the policy learns to predict a task-relevant <i>salient point</i> in the scene and outputs a relative offset from this point to the desired position.
+Separate learnable tokens predict end-effector orientation, gripper state, and control mode.
+The policy can optionally be <b>conditioned</b> on an externally specified salient point—e.g., from a vision-language model—for dynamic and interpretable goal specification.</li>
+                <li><b>Dense Policy:</b> Diffusion Policy which uses RGB images (third-person and wrist) to predict relative 6-DoF delta actions for fine-grained manipulation once near objects.</li>
+                <li><b>Whole-Body Controller (WBC):</b> Converts end-effector actions into joint commands for the mobile base and arm, enabling smooth, constraint-aware execution.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </section> 
+    <hr>
 
     <!-- Evaluations -->
     <section class="section">
@@ -351,23 +375,23 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
           </div>
         </div>
     
+    
         <!-- Description -->
         <div class="columns is-centered shaded-panel" style="width: 90%;">
           <div class="column">
             <p>
-              We evaluate <strong>HoMeR</strong> on 6 diverse mobile manipulation tasks using only 20 demonstrations each. To isolate the effects of hybrid action modes and whole-body control (WBC), we compare against policies that differ along two axes:
+              We evaluate <strong>HoMeR</strong> on six diverse tasks using only 20 demonstrations each. To isolate key design factors, we compare against baselines that differ along two axes:
             </p>
             <ul style="text-align: left;">
-              <li><b>Hybrid vs. Dense-Only:</b> Switching between both keypose and dense actions vs. only dense actions.</li>
-              <li><b>Whole-Body Control vs. Decoupled Base+Arm:</b> Using a whole-body controller to solve for base and arm motion given end-effector targets, vs. directly predicting joint-level motions for each.</li>
+              <li><b>Hybrid vs. Dense-Only:</b> Switching between keypose and dense actions vs. using only dense actions.</li>
+              <li><b>Whole-Body Control vs. Decoupled Base+Arm:</b> Coordinated control using a WBC vs. separate base and arm motion.</li>
             </ul>
             <p>
-              The baselines below match HoMeR in training data, but differ in action space or control strategy.
+              All baselines use the same training data but differ in action space or control strategy.
             </p>
           </div>
         </div>
-        <br />
-    
+
     <div class="columns is-centered shaded-panel" style="width: 90%;">
       <div class="column">
         <h2 class="title is-4 has-text-centered">Baselines Overview</h2>
@@ -441,82 +465,103 @@ We deploy HoMeR on a holonomic mobile manipulator with a 7-DoF arm in a real hom
         </div>
       <div class="columns shaded-panel">
         <div class="column has-text-centered">
-          <video id="cube"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/cube.mp4" 
-            type="video/mp4">
+          <video id="cube" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/cube.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Cube (18/20) </h3>
         </div>
         <div class="column has-text-centered">
-          <video id="dishwasher"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/dishwasher.mp4" 
-            type="video/mp4">
+          <video id="dishwasher" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/dishwasher.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Dishwasher (13/20) </h3>
         </div>
         <div class="column has-text-centered">
-          <video id="cabinet"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/cabinet.mp4" 
-            type="video/mp4">
+          <video id="cabinet" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/cabinet.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Cabinet (17/20) </h3>
         </div>
         </div>
-    </div>
+    
       <div class="columns shaded-panel">
         <div class="column has-text-centered">
-          <video id="pillows"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/pillow.mp4" 
-            type="video/mp4">
+          <video id="pillows" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/pillow.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Pillow Rearrangement (16/20) </h3>
         </div>
         <div class="column has-text-centered">
-          <video id="tv_remote"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/remote.mp4" 
-            type="video/mp4">
+          <video id="tv_remote" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/remote.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">TV Remote Retrieval (15/20) </h3>
         </div>
         <div class="column has-text-centered">
-          <video id="sweep"
-            controls
-            muted
-            autoplay
-            loop
-            width="100%">
-            <source src="media/sweeping.mp4" 
-            type="video/mp4">
+          <video id="sweep" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/sweeping.mp4" type="video/mp4">
           </video>
           <h3 class="title is-5">Sweeping Trash (16/20) </h3>
         </div>
         </div>
-    </div>
+    
+    </section>
+
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h3 class="title is-4">Generalization Results</h3>
+          </div>
+        </div>
+        <div class="columns is-centered has-text-centered">
+          <p class="content has-text-justified" style="margin-top: 1em;">
+            A key benefit of our architecture is the ability to optionally condition the keypose policy on 3D keypoints from a vision-language model (VLM), enabling flexible goal specification and generalization to unseen objects. To assess this, we evaluate <strong>HoMeR-Cond</strong> on four challenging Cube variants with changes in size, clutter, and appearance, using VLM-predicted keypoints as input.
+          </p>
+        </div>
+
+        <div class="chart-container" style="width: 90%; height: 300px; margin: auto;">
+          <canvas id="cubeChart" width="1594" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 797px;"></canvas>
+        </div>
+
+        <div class="columns is-centered has-text-centered">
+          <p class="content has-text-justified" style="margin-top: 1em;">
+          Both <strong>HoMeR</strong> and <strong>HoMeR-Cond-NoAugs</strong> succeed in simple settings but degrade in the presence of distractors or novel objects. In contrast, <strong>HoMeR-Cond</strong> remains robust, demonstrating the value of combining salient point conditioning with point cloud augmentations.
+        </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+        <div class="columns is-centered has-text-centered">
+          <div class="column">
+            <h3 class="title is-4">HoMeR-Cond Rollouts</h3>
+          </div>
+        </div>
+      <div class="columns shaded-panel">
+        <div class="column has-text-centered">
+          <video id="cube-size" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/cube_size.mp4" type="video/mp4">
+          </video>
+          <h3 class="title is-5">Smaller/Larger Cube (14/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="cube-distractors" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/cube_distractors.mp4" type="video/mp4">
+          </video>
+          <h3 class="title is-5">Cube w/ Distractors (15/20) </h3>
+        </div>
+        <div class="column has-text-centered">
+          <video id="cube-specified" controls="" muted="" autoplay="" loop="" width="100%">
+            <source src="media/cube_specified.mp4" type="video/mp4">
+          </video>
+          <h3 class="title is-5">New Cube Specified (16/20) </h3>
+        </div>
+      </div>
+    
+    </section>
     <hr>
 
   </body>
