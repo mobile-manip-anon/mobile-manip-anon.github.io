@@ -26,12 +26,12 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">
+    <h2 id="sec-supplement" class="title is-3 has-text-centered">
       Supplementary Material: Learning In-the-Wild Mobile Manipulation via Hybrid Imitation and Whole-Body Control
     </h2>
 
     <!-- Whole-Body Controller -->
-    <h3 class="title is-4">Whole-Body Controller Implementation Details</h3>
+    <h3 id="sec-wbc" class="title is-4">Whole-Body Controller Implementation Details</h3>
     <p class="content">
       We implement the whole-body controller (WBC) described in <i>Sec. 3.2</i> using MuJoCo <a href="#ref-todorov2012mujoco">[1]</a> and the mink inverse kinematics library <a href="#ref-mink">[2]</a>.
     </p>
@@ -65,9 +65,9 @@
     <hr>
 
     <!-- Hybrid IL -->
-    <h3 class="title is-4">Hybrid IL Implementation Details</h3>
+    <h3 id="sec-hybrid-il" class="title is-4">Hybrid IL Implementation Details</h3>
 
-    <h4 class="title is-5">Keypose Policy</h4>
+    <h4 id="sec-keypose" class="title is-5">Keypose Policy</h4>
     <p class="content">
       We implement the keypose policy using a Transformer that operates on point clouds to predict a 6-DoF end-effector pose. The policy first classifies per-point saliency and then regresses a per-point offset to the target end-effector position. Rotation (as quaternions), gripper state, and control mode are predicted using additional learnable tokens. The network architecture uses 6 Transformer layers with 512-dimensional embeddings and 8 attention heads. No positional encodings are used, as the point cloud input is unordered.
     </p>
@@ -84,7 +84,7 @@
     <hr>
 
     <!-- Data Annotation -->
-    <h4 class="title is-5">Data Annotation</h4>
+    <h4 id="sec-annotation" class="title is-5">Data Annotation</h4>
     <p class="content">
       Training the keypose policy requires labels for modes and salient points. We provide these annotations on teleoperated demonstrations using a lightweight custom interface. Annotators segment each demonstration into keypose and dense control modes by clicking and dragging on a timeline. For frames labeled as keypose, annotators then specify a salient point by clicking on a task-relevant location in the 3D point cloud. Each demonstration typically contains 1–3 such annotations, and full annotation of a 20-demo dataset takes around 15 minutes. These labels supervise both the saliency classification and offset regression components of the keypose policy.
     </p>
@@ -106,7 +106,7 @@
 
     <hr>
 
-    <h4 class="title is-5">Salient-Point Conditioned Keypose Policy</h4>
+    <h4 id="sec-salient" class="title is-5">Salient-Point Conditioned Keypose Policy</h4>
     <p class="content">
       To improve robustness and generalization, we extend the keypose policy to accept externally specified salient points rather than learning to predict them from scratch. These points are encoded as a soft saliency map over the input point cloud and allow the keypose model to attend to a pre-specified point.
     </p>
@@ -121,7 +121,7 @@
 
     <hr>
 
-    <h4 class="title is-5">Dense Policy</h4>
+    <h4 id="sec-dense" class="title is-5">Dense Policy</h4>
     <p class="content">
       We implement the dense policy using a diffusion model that predicts fine-grained delta end-effector motions. Following <a href="#ref-chi2023diffusion">[4]</a>, we use a ResNet-18 encoder to process RGB images and append proprioceptive features before passing them to a 1D convolutional UNet denoiser. The model is trained using DDPM to predict noise added to delta action sequences.
     </p>
