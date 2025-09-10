@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supplementary Material — HoMeR</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+    body { padding: 2rem; line-height: 1.6; }
+    h2, h3, h4 { margin-top: 2rem; }
+    .content { margin-top: 1em; }
+    figure { margin: 2rem 0; text-align: center; }
+    figure img, figure video { max-width: 100%; border-radius: 0.25rem; border: 1px solid #ccc; }
+    figcaption { font-size: 0.9rem; margin-top: 0.3rem; }
+    pre { background: #f5f5f5; padding: 1rem; overflow-x: auto; border-radius: 0.25rem; }
+    hr { margin: 3rem 0; }
+    footer { margin-top: 4rem; font-size: 0.9rem; color: #555; }
+  </style>
+</head>
+<body>
+
+<div style="margin-bottom: 2rem;">
+  <a class="button is-small is-dark is-rounded" href="index.html">
+    ← Back to Home
+  </a>
+</div>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">
+      Supplementary Material: Learning In-the-Wild Mobile Manipulation via Hybrid Imitation and Whole-Body Control
+    </h2>
+
+    <!-- Whole-Body Controller -->
+    <h3 class="title is-4">Whole-Body Controller Implementation Details</h3>
+    <p class="content">
+      We implement the whole-body controller (WBC) described in <i>Sec. 3.2</i> using MuJoCo <a href="#ref-todorov2012mujoco">[1]</a> and the mink inverse kinematics library <a href="#ref-mink">[2]</a>.
+    </p>
+
+    <p class="content"><b>Model and Tasks.</b><br>
+      We load the MuJoCo model of the robot, with two camera mounts attached to the base, from an MJCF file. The WBC includes the following tasks:
+    </p>
+    <ul class="content">
+      <li><b>End-effector pose task:</b> A 6-DoF frame task is defined at the end-effector, with cost weights W<sub>ee</sub> = 1.0 for both position and orientation tracking.</li>
+      <li><b>Posture task:</b> A quadratic penalty encourages the robot to remain near a neutral joint configuration. We set W<sub>posture</sub> = 2 × 10<sup>-3</sup> for all non-base joints. The target configuration corresponds to a tucked arm posture used across all tasks.</li>
+      <li><b>Base damping task:</b> A damping cost of W<sub>damping</sub> = 1.5 is applied to base velocities to prevent excessive motion.</li>
+    </ul>
+
+    <p class="content"><b>Constraints.</b><br>
+      We enforce the following limits during IK:
+    </p>
+    <ul class="content">
+      <li><b>Velocity limits:</b> Base velocities are capped at (0.5, 0.5, π/2) m/s and rad/s. Arm joints are limited to ~80°/s for the first four joints and 140°/s for the wrist joints.</li>
+      <li><b>Joint position limits:</b> All joint limits of the robot are enforced.</li>
+      <li><b>(Optional) Collision limits:</b> We define geometric collision pairs between the arm, gripper, base, and camera mounts, with a 2 cm safety margin and 10 cm detection range. This constraint was not needed in our benchmarking experiments as our placement of cameras was not at high collision risk with whole-body motions, but remains available as a flexible add-on and is demonstrated during teleoperation.</li>
+    </ul>
+
+    <p class="content"><b>Solver parameters.</b><br>
+      We solve the IK problem using mink's QP solver with a Levenberg-Marquardt damping factor of 1.0. The solver runs for up to 20 iterations with a convergence threshold of 10<sup>-4</sup> for both position and orientation errors. Joint velocities are integrated using Euler integration.
+    </p>
+
+    <p class="content"><b>Usage.</b><br>
+      At runtime, the solver takes as input a desired end-effector pose and the current joint configuration, and returns a joint position command by solving the constrained IK problem and integrating the resulting joint velocities. All weights and thresholds are fixed and reused across all tasks without any per-task tuning.
+    </p>
+
+    <hr>
+
+    <!-- Hybrid IL -->
+    <h3 class="title is-4">Hybrid IL Implementation Details</h3>
+
+    <h4 class="title is-5">Keypose Policy</h4>
+    <p class="content">
+      We implement the keypose policy using a Transformer that operates on point clouds to predict a 6-DoF end-effector pose. The policy first classifies per-point saliency and then regresses a per-point offset to the target end-effector position. Rotation (as quaternions), gripper state, and control mode are predicted using additional learnable tokens. The network architecture uses 6 Transformer layers with 512-dimensional embeddings and 8 attention heads. No positional encodings are used, as the point cloud input is unordered.
+    </p>
+    <p class="content">
+      Following <a href="#ref-sundaresan2024s">[3]</a>, the full training objective is a simple unweighted sum of the following: (1) salient point classification loss, (2) offset regression loss on high-saliency points, (3) MSE on normalized quaternions, (4) binary cross-entropy on gripper state, and (5) cross-entropy loss on control mode.
+    </p>
+    <p class="content">
+      We apply temporal augmentation by including intermediate steps from the controller’s motion trajectory toward each annotated keypose. For each waypoint segment, we train not only on the initial observation but also on a prefix of the interpolated segment. We use α = 0.2, meaning we sample the first 20% of timesteps in the segment. This increases the data sixfold in most cases and improves performance across tasks.
+    </p>
+    <p class="content">
+      Additionally, we apply spatial augmentations by randomly translating the entire point cloud and corresponding action label within a 5 cm cube. No vision-based pre-processing or segmentation is used beyond cropping to workspace bounds. We train for 2000 epochs using Adam with a base learning rate of 1e-4 and cosine decay, gradient clipping (max norm 1), dropout of 0.1, batch size 64, and exponential moving average (EMA) with decay annealed up to 0.9999. All evaluations use the final checkpoint.
+    </p>
+
+    <hr>
+
+    <!-- Data Annotation -->
+    <h4 class="title is-5">Data Annotation</h4>
+    <p class="content">
+      Training the keypose policy requires labels for modes and salient points. We provide these annotations on teleoperated demonstrations using a lightweight custom interface. Annotators segment each demonstration into keypose and dense control modes by clicking and dragging on a timeline. For frames labeled as keypose, annotators then specify a salient point by clicking on a task-relevant location in the 3D point cloud. Each demonstration typically contains 1–3 such annotations, and full annotation of a 20-demo dataset takes around 15 minutes. These labels supervise both the saliency classification and offset regression components of the keypose policy.
+    </p>
+
+    <figure>
+      <img src="media/mode_annotation.png" alt="Mode Annotation Example">
+      <figcaption><b>HoMeR Mode Annotation Example:</b> Frame-by-frame segmentation of keypose and dense control phases.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="media/mode_annotation_homerba.png" alt="Mode Annotation B+A Example">
+      <figcaption><b>HoMeR (B+A) Mode Annotation Example:</b> Base+arm teleoperation example with keypose/dense labeling.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="media/salient_point_interface.png" width="500" alt="Salient Point Interface">
+      <figcaption><b>Salient Point Annotation Interface:</b> Annotators specify task-relevant points for keypose frames.</figcaption>
+    </figure>
+
+    <hr>
+
+    <h4 class="title is-5">Salient-Point Conditioned Keypose Policy</h4>
+    <p class="content">
+      To improve robustness and generalization, we extend the keypose policy to accept externally specified salient points rather than learning to predict them from scratch. These points are encoded as a soft saliency map over the input point cloud and allow the keypose model to attend to a pre-specified point.
+    </p>
+    <p class="content">
+      We train this variant with a masked supervision strategy. 50% of the time, we include the saliency map, and the policy learns to predict actions relative to given salient points when available. In the other 50%, we mask out the saliency map, and the model learns to predict the map in addition to the action, to encourage learning useful features of the point cloud. Data augmentations (color removal, distractor points) are applied to improve robustness.
+    </p>
+
+    <figure>
+      <img src="media/molmo_output.png" alt="MolMo Keypoints Output">
+      <figcaption><b>Extracting Salient Points from MolMo:</b> Backprojected pixels from language prompts guide keypose policy.</figcaption>
+    </figure>
+
+    <hr>
+
+    <h4 class="title is-5">Dense Policy</h4>
+    <p class="content">
+      We implement the dense policy using a diffusion model that predicts fine-grained delta end-effector motions. Following <a href="#ref-chi2023diffusion">[4]</a>, we use a ResNet-18 encoder to process RGB images and append proprioceptive features before passing them to a 1D convolutional UNet denoiser. The model is trained using DDPM to predict noise added to delta action sequences.
+    </p>
+    <p class="content">
+      At test time, the policy predicts a future horizon of 16 actions and executes the first 8 before replanning. Observations include third-person and wrist-mounted RGB images. The final checkpoint is used for evaluation.
+    </p>
+
+    <hr>
+
+    <!-- References -->
+    <footer>
+      <h3 class="title is-5">References</h3>
+      <ol>
+        <li id="ref-todorov2012mujoco">E. Todorov, T. Erez, and Y. Tassa. "MuJoCo: A physics engine for model-based control." IROS 2012.</li>
+        <li id="ref-mink">Mink Inverse Kinematics Library. <a href="https://github.com/kevinzakka/mink">https://github.com/kevinzakka/mink</a>.</li>
+        <li id="ref-sundaresan2024s">P. Sundaresan, H. Hu, Q. Vuong, J. Bohg, D. Sadigh. " What's the Move? Hybrid Imitation Learning via Salient Points." ICLR 2025.</li>
+        <li id="ref-chi2023diffusion">C. Chi, Z. Xu, S. Feng, E. Cousineau, Y. Du, B. Burchfiel, R. Tedrake, and S. Song. "Diffusion policy: Visuomotor policy learning via action diffusion." RSS 2023</li>
+      </ol>
+    </footer>
+
+  </div>
+</section>
+
+</body>
+</html>
+
