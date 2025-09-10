@@ -95,6 +95,7 @@
       <a class="navbar-item" href="#method">Method</a>
       <a class="navbar-item" href="#benchmark">Benchmark Experiments</a>
       <a class="navbar-item" href="#generalization">Generalization Experiments</a>
+      <a class="navbar-item" href="supp.html">Supplementary Material</a>
     </div>
   </div>
 </nav>
@@ -158,6 +159,24 @@
          </div>
         <div class="container">
           <div id="results-carousel" class="carousel results-carousel">
+            <!-- Homer-Cond -->
+            <div class="item">
+              <video
+                poster=""
+                id="carousel-rollout"
+                autoplay
+                muted
+                loop
+                controls
+                height="100%"
+              >
+                <source
+                  src="media/homer_cond_real.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+
             <!-- Fold -->
             <div class="item">
               <video
@@ -194,6 +213,7 @@
               </video>
             </div>
 
+
             <!-- Socks -->
             <div class="item">
               <video
@@ -211,6 +231,7 @@
                 />
               </video>
             </div>
+
 
             <!-- Drawer -->
             <div class="item">
@@ -647,7 +668,8 @@ The policy can optionally be <b>conditioned</b> on an externally specified salie
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h3 class="title is-4" id="generalization">Quantitative Generalization Results</h3>
+        <h3 class="title is-4" id="generalization">Simulated Generalization</h3>
+        <h3 class="title is-5">Quantitative Results</h3>
       </div>
     </div>
     <div class="columns is-centered has-text-centered">
@@ -675,7 +697,7 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
     <section class="section">
         <div class="columns is-centered has-text-centered">
           <div class="column">
-            <h3 class="title is-5">HoMeR-Cond Rollouts</h3>
+            <h3 class="title is-5">Qualitative Results</h3>
           </div>
         </div>
       <div class="columns shaded-panel">
@@ -706,10 +728,11 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h3 class="title is-4">Qualitative Generalization Results</h3>
+        <h3 class="title is-4">Real-World Generalization</h3>
         <div class="column has-text-centered">
+        <h3 class="title is-5">HoMeR</h3>
         <p class="content has-text-justified" style="margin-top: 1em;">
-          Below, we show that while <b>HoMeR</b> is trained on a single TV stand cabinet and a specific pillow–couch configuration, the learned policy achieves <b>non-zero success</b> on <b>novel cabinets</b> and a <b>different pillow/couch pair</b> at test time. We note that HoMeR still struggles quite a bit on the new couch/pillow setup, likely due to the vastly different wall color and lighting conditions.
+          Below, we show that while vanilla <b>HoMeR</b> is trained on a single TV stand cabinet and a specific pillow–couch configuration, the learned policy achieves <b>non-zero success</b> on <b>novel cabinets</b> and a <b>different pillow/couch pair</b> at test time. We note that HoMeR still struggles quite a bit on the new couch/pillow setup, likely due to the vastly different wall color and lighting conditions.
         </p>
           <video id="sweep" controls="" muted="" autoplay="" loop="" width="100%">
             <source src="media/generalization.mp4" type="video/mp4">
@@ -723,6 +746,68 @@ To further improve robustness, <strong>HoMeR-Cond</strong> is trained on point c
     </div>
   </div>
 </section>
+
+<section class="section" id="homer-cond-real">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h3 class="title is-5">HoMeR-Cond</h3>
+        <p class="content has-text-justified" style="margin-top: 1em;">
+          <strong>HoMeR-Cond</strong> in particular has even greater capacity for real-world generalization and we demonstrate this on a real-world decluttering task using Gemini 2.5 Pro for external salient point specification. The robot is tasked with picking up user-specified stuffed animals and placing them into a basket, achieving a 16/20 rate (9/10 seen, 7/10 unseen objects). These results highlight HoMeR's compatibility with various foundation models (Molmo, Gemini) for open-set, language-conditioned manipulation in unstructured real-world environments.
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div class="column has-text-centered">
+        <video controls muted autoplay loop width="100%">
+          <source src="media/homer_cond_real_full.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Gemini visualization -->
+    <div>
+      <div class="column has-text-centered">
+        <h3 class="title is-5">Gemini Pointing & Task Execution Visualization</h3>
+        <video controls muted autoplay loop style="width: 100%; max-width: 250vw;">
+          <source src="media/homer_cond_real_vis.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <br>
+    <div class="columns is-centered shaded-panel" style="width: 60%; margin: auto;">
+      <div class="column">
+        <h3 class="title is-5 has-text-centered">Task Success</h3>
+        <table class="table is-fullwidth is-striped is-bordered has-text-centered">
+          <thead>
+            <tr>
+              <th>Object Set</th>
+              <th>Success</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Seen Objects</td>
+              <td>9 / 10</td>
+            </tr>
+            <tr>
+              <td>Unseen Objects</td>
+              <td>7 / 10</td>
+            </tr>
+            <tr style="background-color: #fb8b2440;">
+              <td><strong>Overall</strong></td>
+              <td><strong>16 / 20</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
 
   </body>
